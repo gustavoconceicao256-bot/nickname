@@ -1,1 +1,18 @@
-
+{
+  "name": "nickname-bot",
+  "version": "1.0.0",
+  "description": "Bot de atualização automática de nicknames",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node ."
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "dependencies": {
+    "discord.js": "^14.22.1",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0"
+  }
+}
