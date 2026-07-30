@@ -2,7 +2,9 @@ export default {
 
     guildId: process.env.GUILD_ID,
 
-    prefixos: [
+    intervaloScan: 10 * 60 * 1000
+
+};
 
         "『00』",
         "『01』",
