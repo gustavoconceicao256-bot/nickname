@@ -4,66 +4,117 @@ import cargos from "./cargos.js";
 export async function atualizarNick(member){
 
 
-    if(member.user.bot) return;
+    try {
 
 
-    let cargoEncontrado = null;
+        if(member.user.bot)
+            return false;
 
 
-    for(const id in cargos){
+
+        let cargoPrincipal = null;
 
 
-        if(member.roles.cache.has(id)){
+
+        for(const cargoId in cargos){
 
 
-            let cargo = cargos[id];
+            if(member.roles.cache.has(cargoId)){
 
 
-            if(
-                !cargoEncontrado ||
-                cargo.prioridade > cargoEncontrado.prioridade
-            ){
+                const cargo = cargos[cargoId];
 
-                cargoEncontrado = cargo;
+
+
+                if(
+                    !cargoPrincipal ||
+                    cargo.prioridade > cargoPrincipal.prioridade
+                ){
+
+                    cargoPrincipal = cargo;
+
+                }
+
 
             }
 
+
         }
 
-    }
 
 
-    if(!cargoEncontrado) return;
+        if(!cargoPrincipal)
+            return false;
 
 
-    let nickAtual = member.nickname || member.user.username;
+
+        let nickAtual =
+        member.nickname ||
+        member.user.username;
 
 
-    let nomeLimpo = nickAtual;
+
+        let nomeLimpo = nickAtual;
 
 
-    for(const id in cargos){
 
-        nomeLimpo = nomeLimpo.replace(
-            cargos[id].prefixo,
-            ""
+        // remove prefixos antigos
+
+        for(const cargoId in cargos){
+
+
+            nomeLimpo =
+            nomeLimpo.replace(
+                cargos[cargoId].prefixo,
+                ""
+            );
+
+
+        }
+
+
+
+        nomeLimpo = nomeLimpo.trim();
+
+
+
+        const novoNick =
+        `${cargoPrincipal.prefixo}${nomeLimpo}`;
+
+
+
+        if(nickAtual === novoNick)
+            return false;
+
+
+
+        await member.setNickname(novoNick);
+
+
+
+        console.log(
+            `Nick atualizado: ${member.user.tag} -> ${novoNick}`
         );
 
+
+
+        return true;
+
+
+
+    } catch(error){
+
+
+        console.log(
+            `Erro alterando nick de ${member.user.tag}:`,
+            error.message
+        );
+
+
+        return false;
+
+
     }
-
-
-    nomeLimpo = nomeLimpo.trim();
-
-
-    let novoNick =
-    `${cargoEncontrado.prefixo}${nomeLimpo}`;
-
-
-    if(nickAtual === novoNick) return;
-
-
-    await member.setNickname(novoNick)
-    .catch(()=>{});
 
 
 }
