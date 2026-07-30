@@ -7,16 +7,31 @@ newMember
 ){
 
 
-    if(
-        oldMember.roles.cache.size !==
-        newMember.roles.cache.size
-    ){
+    const cargosAntigos = oldMember.roles.cache
+        .map(role => role.id)
+        .sort()
+        .join(",");
 
 
-        await atualizarNick(newMember);
 
+    const cargosNovos = newMember.roles.cache
+        .map(role => role.id)
+        .sort()
+        .join(",");
+
+
+
+    // Se os cargos forem iguais, não faz nada
+    if(cargosAntigos === cargosNovos){
+
+        return;
 
     }
+
+
+
+    // Se algum cargo mudou, atualiza o nickname
+    await atualizarNick(newMember);
 
 
 }
