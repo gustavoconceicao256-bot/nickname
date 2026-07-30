@@ -14,7 +14,6 @@ import guildMemberUpdate from "./events/guildMemberUpdate.js";
 dotenv.config();
 
 
-
 const client = new Client({
 
     intents:[
@@ -26,7 +25,6 @@ const client = new Client({
     ]
 
 });
-
 
 
 client.once(
