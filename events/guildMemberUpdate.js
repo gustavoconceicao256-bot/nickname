@@ -1,7 +1,10 @@
 import { atualizarNick } from "../utils/nickname.js";
 
 
-export default async function(oldMember,newMember){
+export default async function(
+oldMember,
+newMember
+){
 
 
     if(
@@ -9,7 +12,9 @@ export default async function(oldMember,newMember){
         newMember.roles.cache.size
     ){
 
-        atualizarNick(newMember);
+
+        await atualizarNick(newMember);
+
 
     }
 
