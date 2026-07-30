@@ -1,1 +1,27 @@
+export default {
 
+    guildId: process.env.GUILD_ID,
+
+    prefixos: [
+
+        "『00』",
+        "『01』",
+        "『02』",
+        "『03』",
+        "『L.T』",
+        "『GT.G』",
+        "『GT.T』",
+        "『GT.V』",
+        "『GT.R』",
+        "『GT.F』",
+        "『T』",
+        "『REC』",
+        "『V』",
+        "『M』",
+        "『OLHEIRO』"
+
+    ],
+
+    intervaloScan: 10 * 60 * 1000
+
+};
