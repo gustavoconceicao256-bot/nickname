@@ -1,5 +1,4 @@
 import cargos from "./cargos.js";
-import { pegarNickAntigo } from "./auditoria.js";
 
 
 export async function atualizarNick(member){
@@ -17,8 +16,6 @@ export async function atualizarNick(member){
 
 
 
-        // Procura somente cargos cadastrados no cargos.js
-
         for(const cargoId in cargos){
 
 
@@ -26,7 +23,6 @@ export async function atualizarNick(member){
 
 
                 const cargo = cargos[cargoId];
-
 
 
                 if(
@@ -46,8 +42,6 @@ export async function atualizarNick(member){
 
 
 
-        // Se não tiver cargo da hierarquia, não mexe
-
         if(!cargoPrincipal)
             return false;
 
@@ -63,24 +57,7 @@ export async function atualizarNick(member){
 
 
 
-        // Tenta recuperar o nome antigo pela auditoria
-
-        const nickAntigo = await pegarNickAntigo(
-            member.guild,
-            member
-        );
-
-
-        if(nickAntigo){
-
-            nomeLimpo = nickAntigo;
-
-        }
-
-
-
-        // Remove prefixos cadastrados no sistema
-
+        // Remove somente prefixos do seu sistema
         for(const cargoId in cargos){
 
 
@@ -94,13 +71,17 @@ export async function atualizarNick(member){
 
 
 
-        // Remove somente prefixos no formato 『M』 『FAR』 『VIP』
-        // apenas se estiverem no começo do nome
+        // Remove somente 『ALGUMA COISA』 no começo
+        while(
+            /^『[^』]+』\s*/.test(nomeLimpo)
+        ){
 
-        nomeLimpo = nomeLimpo.replace(
-            /^『[^』]+』\s*/g,
-            ""
-        );
+            nomeLimpo = nomeLimpo.replace(
+                /^『[^』]+』\s*/,
+                ""
+            );
+
+        }
 
 
 
@@ -108,21 +89,27 @@ export async function atualizarNick(member){
 
 
 
-        // Se não conseguiu achar nome nenhum, não mexe
+        // Segurança: se o nome ficar vazio, não altera
 
-        if(!nomeLimpo)
+        if(
+            !nomeLimpo ||
+            nomeLimpo.length < 3
+        ){
+
+            console.log(
+                `Ignorado para segurança: ${member.user.tag}`
+            );
+
             return false;
 
+        }
 
 
-        // Cria o nickname correto
 
         const novoNick =
             `${cargoPrincipal.prefixo} ${nomeLimpo}`;
 
 
-
-        // Evita editar se já estiver certo
 
         if(nickAtual === novoNick)
             return false;
