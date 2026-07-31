@@ -11,22 +11,39 @@ export async function scanner(guild){
         await guild.members.fetch();
 
 
-
         let corrigidos = 0;
 
 
-
-        for(const membro of guild.members.cache.values()){
-
-
-            const resultado = await atualizarNick(membro);
+        const membros = [
+            ...guild.members.cache.values()
+        ];
 
 
-            if(resultado){
 
-                corrigidos++;
+        // Processa 10 membros por vez
 
-            }
+        for(let i = 0; i < membros.length; i += 10){
+
+
+            const lote = membros.slice(i, i + 10);
+
+
+
+            const resultados = await Promise.all(
+                lote.map(membro => atualizarNick(membro))
+            );
+
+
+
+            corrigidos += resultados.filter(Boolean).length;
+
+
+
+            // pequena pausa para não tomar rate limit
+
+            await new Promise(resolve =>
+                setTimeout(resolve, 1000)
+            );
 
 
         }
@@ -41,12 +58,13 @@ export async function scanner(guild){
 
     } catch(error){
 
+
         console.log(
             "Erro na varredura:",
             error
         );
 
-    }
 
+    }
 
 }
