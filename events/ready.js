@@ -1,55 +1,31 @@
-import { scanner } from "../utils/scanner.js";
+client.once(
+"ready",
+async ()=>{
+
+    ready(client);
 
 
-export default async function(client){
+    console.log("🤖 Scanner de nomes iniciado");
 
 
-    console.log(
-        `Online como ${client.user.tag}`
-    );
+    // Faz uma verificação assim que liga
+    for(const guild of client.guilds.cache.values()){
 
-
-    const guild = 
-    client.guilds.cache.get(
-        process.env.GUILD_ID
-    );
-
-
-    if(!guild){
-
-        console.log(
-            "Servidor não encontrado"
-        );
-
-        return;
+        scanner(guild);
 
     }
 
 
+    // Repete a cada 1 minuto
+    setInterval(()=>{
 
-    console.log(
-        "Iniciando primeira varredura..."
-    );
+        for(const guild of client.guilds.cache.values()){
 
+            scanner(guild);
 
-    await scanner(guild);
+        }
 
-
-
-    setInterval(async ()=>{
-
-
-        console.log(
-            "Executando varredura automática..."
-        );
+    },60000);
 
 
-        await scanner(guild);
-
-
-
-    }, 600000);
-
-
-
-}
+});
