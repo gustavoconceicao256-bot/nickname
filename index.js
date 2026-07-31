@@ -3,8 +3,8 @@ import dotenv from "dotenv";
 
 import "./keepAlive.js";
 
-import ready from "./Eventos/ready.js";
-import guildMemberUpdate from "./Eventos/guildMemberUpdate.js";
+import ready from "./events/ready.js";
+import guildMemberUpdate from "./events/guildMemberUpdate.js";
 import { scanner } from "./utils/scanner.js";
 
 dotenv.config();
