@@ -1,4 +1,5 @@
 import cargos from "./cargos.js";
+import { pegarNickAntigo } from "./auditoria.js";
 
 
 export async function atualizarNick(member){
@@ -62,6 +63,22 @@ export async function atualizarNick(member){
 
 
 
+        // Tenta recuperar o nome antigo pela auditoria
+
+        const nickAntigo = await pegarNickAntigo(
+            member.guild,
+            member
+        );
+
+
+        if(nickAntigo){
+
+            nomeLimpo = nickAntigo;
+
+        }
+
+
+
         // Remove prefixos cadastrados no sistema
 
         for(const cargoId in cargos){
@@ -77,8 +94,8 @@ export async function atualizarNick(member){
 
 
 
-        // Remove apenas prefixos no formato 『M』 『FAR』 『VIP』
-        // somente se estiverem no começo do nome
+        // Remove somente prefixos no formato 『M』 『FAR』 『VIP』
+        // apenas se estiverem no começo do nome
 
         nomeLimpo = nomeLimpo.replace(
             /^『[^』]+』\s*/g,
@@ -88,6 +105,13 @@ export async function atualizarNick(member){
 
 
         nomeLimpo = nomeLimpo.trim();
+
+
+
+        // Se não conseguiu achar nome nenhum, não mexe
+
+        if(!nomeLimpo)
+            return false;
 
 
 
