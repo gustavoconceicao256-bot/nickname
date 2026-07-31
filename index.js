@@ -9,7 +9,7 @@ import "./keepAlive.js";
 
 import ready from "./events/ready.js";
 import guildMemberUpdate from "./events/guildMemberUpdate.js";
-import nameScanner from "./events/nameScanner.js";
+import { scanner } from "./events/scanner.js";
 
 
 dotenv.config();
@@ -28,21 +28,34 @@ const client = new Client({
 });
 
 
+
 client.once(
 "ready",
-()=>{
+async ()=>{
 
     ready(client);
 
 
-    // Scanner inicial
-    nameScanner(client);
+    console.log("🤖 Scanner de nomes iniciado");
+
+
+    // Scanner assim que o bot liga
+    for(const guild of client.guilds.cache.values()){
+
+        scanner(guild);
+
+    }
+
 
 
     // Scanner a cada 1 minuto
     setInterval(()=>{
 
-        nameScanner(client);
+        for(const guild of client.guilds.cache.values()){
+
+            scanner(guild);
+
+        }
 
     },60000);
 
