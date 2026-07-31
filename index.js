@@ -5,11 +5,11 @@ import {
 
 import dotenv from "dotenv";
 
-import "./keepAlive.js";
+import "./keepalive/keepalive.js";
 
-import ready from "./events/ready.js";
-import guildMemberUpdate from "./events/guildMemberUpdate.js";
-import { scanner } from "./events/scanner.js";
+import ready from "./eventos/ready.js";
+import guildMemberUpdate from "./eventos/guildMemberUpdate.js";
+import { scanner } from "./utils/scanner.js";
 
 
 dotenv.config();
@@ -39,7 +39,7 @@ async ()=>{
     console.log("🤖 Scanner de nomes iniciado");
 
 
-    // Scanner assim que o bot liga
+    // Faz a primeira verificação quando o bot liga
     for(const guild of client.guilds.cache.values()){
 
         scanner(guild);
@@ -48,7 +48,7 @@ async ()=>{
 
 
 
-    // Scanner a cada 1 minuto
+    // Verifica a cada 1 minuto
     setInterval(()=>{
 
         for(const guild of client.guilds.cache.values()){
