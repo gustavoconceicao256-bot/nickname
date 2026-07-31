@@ -5,7 +5,7 @@ import {
 
 import dotenv from "dotenv";
 
-import "./keepalive/keepalive.js";
+import "./keepAlive.js";
 
 import ready from "./eventos/ready.js";
 import guildMemberUpdate from "./eventos/guildMemberUpdate.js";
