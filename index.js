@@ -19,7 +19,7 @@ const client = new Client({
 client.once("ready", async () => {
     await ready(client);
 
-    console.log("🤖 Scanner de nomes iniciado.");
+    console.log("🤖 Scanner de nomes iniciado");
 
     for (const guild of client.guilds.cache.values()) {
         await scanner(guild);
