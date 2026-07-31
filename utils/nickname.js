@@ -16,6 +16,8 @@ export async function atualizarNick(member){
 
 
 
+        // Procura somente cargos cadastrados no cargos.js
+
         for(const cargoId in cargos){
 
 
@@ -43,14 +45,16 @@ export async function atualizarNick(member){
 
 
 
+        // Se não tiver cargo da hierarquia, não mexe
+
         if(!cargoPrincipal)
             return false;
 
 
 
         let nickAtual =
-        member.nickname ||
-        member.user.username;
+            member.nickname ||
+            member.user.username;
 
 
 
@@ -58,13 +62,12 @@ export async function atualizarNick(member){
 
 
 
-        // remove prefixos antigos
+        // Remove prefixos cadastrados no sistema
 
         for(const cargoId in cargos){
 
 
-            nomeLimpo =
-            nomeLimpo.replace(
+            nomeLimpo = nomeLimpo.replace(
                 cargos[cargoId].prefixo,
                 ""
             );
@@ -74,14 +77,27 @@ export async function atualizarNick(member){
 
 
 
+        // Remove qualquer prefixo colocado manualmente
+
+        nomeLimpo = nomeLimpo.replace(
+            /^(\[.*?\]|『.*?』|\(.*?\)|\S+\s)\s*/g,
+            ""
+        );
+
+
+
         nomeLimpo = nomeLimpo.trim();
 
 
 
+        // Cria o nickname correto
+
         const novoNick =
-        `${cargoPrincipal.prefixo}${nomeLimpo}`;
+            `${cargoPrincipal.prefixo} ${nomeLimpo}`;
 
 
+
+        // Evita editar se já estiver certo
 
         if(nickAtual === novoNick)
             return false;
