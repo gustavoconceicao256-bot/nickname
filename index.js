@@ -1,6 +1,6 @@
 import {
-Client,
-GatewayIntentBits
+    Client,
+    GatewayIntentBits
 } from "discord.js";
 
 import dotenv from "dotenv";
@@ -9,6 +9,7 @@ import "./keepAlive.js";
 
 import ready from "./events/ready.js";
 import guildMemberUpdate from "./events/guildMemberUpdate.js";
+import nameScanner from "./events/nameScanner.js";
 
 
 dotenv.config();
@@ -29,8 +30,24 @@ const client = new Client({
 
 client.once(
 "ready",
-()=>ready(client)
-);
+()=>{
+
+    ready(client);
+
+
+    // Scanner inicial
+    nameScanner(client);
+
+
+    // Scanner a cada 1 minuto
+    setInterval(()=>{
+
+        nameScanner(client);
+
+    },60000);
+
+
+});
 
 
 
