@@ -1,4 +1,5 @@
 import cargos from "./cargos.js";
+import ignorados from "./ignorados.js";
 
 
 export async function atualizarNick(member){
@@ -16,13 +17,23 @@ export async function atualizarNick(member){
 
 
 
+        // Procura somente cargos da hierarquia
+
         for(const cargoId in cargos){
+
+
+            // ignora cargos bloqueados
+
+            if(ignorados.includes(cargoId))
+                continue;
+
 
 
             if(member.roles.cache.has(cargoId)){
 
 
                 const cargo = cargos[cargoId];
+
 
 
                 if(
@@ -42,6 +53,8 @@ export async function atualizarNick(member){
 
 
 
+        // Se não tem cargo da hierarquia, não altera
+
         if(!cargoPrincipal)
             return false;
 
@@ -57,7 +70,8 @@ export async function atualizarNick(member){
 
 
 
-        // Remove somente prefixos do seu sistema
+        // Remove prefixos da própria hierarquia
+
         for(const cargoId in cargos){
 
 
@@ -71,7 +85,8 @@ export async function atualizarNick(member){
 
 
 
-        // Remove somente 『ALGUMA COISA』 no começo
+        // Remove prefixos cosméticos que aparecerem no nick
+
         while(
             /^『[^』]+』\s*/.test(nomeLimpo)
         ){
@@ -89,7 +104,7 @@ export async function atualizarNick(member){
 
 
 
-        // Segurança: se o nome ficar vazio, não altera
+        // Proteção contra apagar nome
 
         if(
             !nomeLimpo ||
@@ -97,7 +112,7 @@ export async function atualizarNick(member){
         ){
 
             console.log(
-                `Ignorado para segurança: ${member.user.tag}`
+                `Ignorado por segurança: ${member.user.tag}`
             );
 
             return false;
