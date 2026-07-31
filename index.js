@@ -17,6 +17,7 @@ const client = new Client({
 });
 
 client.once("ready", async () => {
+
     await ready(client);
 
     console.log("🤖 Scanner de nomes iniciado");
@@ -26,14 +27,21 @@ client.once("ready", async () => {
     }
 
     setInterval(async () => {
+
         for (const guild of client.guilds.cache.values()) {
             await scanner(guild);
         }
+
     }, 60000);
+
 });
 
+
 client.on("guildMemberUpdate", async (oldMember, newMember) => {
+
     await guildMemberUpdate(oldMember, newMember);
+
 });
+
 
 client.login(process.env.TOKEN);
