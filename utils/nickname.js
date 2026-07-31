@@ -77,13 +77,17 @@ export async function atualizarNick(member){
 
 
 
-        // Remove qualquer prefixo colocado manualmente
+      // Remove qualquer prefixo no começo do nome
+while(
+    /^(\[.*?\]|『.*?』|\(.*?\))\s*/.test(nomeLimpo)
+){
 
-        nomeLimpo = nomeLimpo.replace(
-            /^(\[.*?\]|『.*?』|\(.*?\)|\S+\s)\s*/g,
-            ""
-        );
+    nomeLimpo = nomeLimpo.replace(
+        /^(\[.*?\]|『.*?』|\(.*?\))\s*/,
+        ""
+    );
 
+}
 
 
         nomeLimpo = nomeLimpo.trim();
