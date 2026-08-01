@@ -7,41 +7,201 @@ import ready from "./events/ready.js";
 import guildMemberUpdate from "./events/guildMemberUpdate.js";
 import { scanner } from "./utils/scanner.js";
 
+
 dotenv.config();
 
+
+
 const client = new Client({
-    intents: [
+
+    intents:[
+
         GatewayIntentBits.Guilds,
+
         GatewayIntentBits.GuildMembers
+
     ]
+
 });
 
-client.once("ready", async () => {
 
-    await ready(client);
 
-    console.log("🤖 Scanner de nomes iniciado");
+// ===============================
+// ERROS PARA NÃO DERRUBAR O BOT
+// ===============================
 
-    for (const guild of client.guilds.cache.values()) {
-        await scanner(guild);
+process.on(
+    "unhandledRejection",
+    error => {
+
+        console.error(
+            "Erro não tratado:",
+            error
+        );
+
     }
+);
 
-    setInterval(async () => {
 
-        for (const guild of client.guilds.cache.values()) {
-            await scanner(guild);
+process.on(
+    "uncaughtException",
+    error => {
+
+        console.error(
+            "Erro crítico:",
+            error
+        );
+
+    }
+);
+
+
+
+// ===============================
+// BOT ONLINE
+// ===============================
+
+client.once(
+    "ready",
+    async ()=>{
+
+
+        await ready(client);
+
+
+        console.log(
+            "🤖 Scanner iniciado"
+        );
+
+
+
+        async function iniciarScanner(){
+
+
+            try{
+
+
+                for(
+                    const guild of client.guilds.cache.values()
+                ){
+
+                    await scanner(guild);
+
+                }
+
+
+
+                console.log(
+                    "✅ Scanner finalizado:",
+                    new Date().toLocaleString()
+                );
+
+
+
+            }catch(error){
+
+
+                console.error(
+                    "Erro no scanner:",
+                    error
+                );
+
+
+            }
+
+
+
+            // espera 1 minuto antes do próximo
+
+            setTimeout(
+                iniciarScanner,
+                60000
+            );
+
+
         }
 
-    }, 60000);
-
-});
 
 
-client.on("guildMemberUpdate", async (oldMember, newMember) => {
-
-    await guildMemberUpdate(oldMember, newMember);
-
-});
+        iniciarScanner();
 
 
-client.login(process.env.TOKEN);
+    }
+);
+
+
+
+// ===============================
+// ALTERAÇÃO DE CARGO/NICK
+// ===============================
+
+client.on(
+    "guildMemberUpdate",
+    async(
+        oldMember,
+        newMember
+    )=>{
+
+
+        try{
+
+            await guildMemberUpdate(
+                oldMember,
+                newMember
+            );
+
+
+        }catch(error){
+
+
+            console.error(
+                "Erro guildMemberUpdate:",
+                error
+            );
+
+
+        }
+
+
+    }
+);
+
+
+
+// ===============================
+// CONEXÃO
+// ===============================
+
+client.on(
+    "disconnect",
+    ()=>{
+
+        console.log(
+            "⚠️ Discord desconectou"
+        );
+
+    }
+);
+
+
+
+client.on(
+    "reconnecting",
+    ()=>{
+
+        console.log(
+            "🔄 Reconectando..."
+        );
+
+    }
+);
+
+
+
+// ===============================
+// LOGIN
+// ===============================
+
+client.login(
+    process.env.TOKEN
+);
