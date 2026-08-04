@@ -97,7 +97,7 @@ export default {
 
     "1522085772826775713": {
         nome:"Olheiro",
-        prefixo:"『OLHEIRO』",
+        prefixo:"『OLH』",
         prioridade:1
     }
 
