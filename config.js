@@ -20,7 +20,7 @@ export default {
         "『REC』",
         "『V』",
         "『M』",
-        "『OLHEIRO』"
+        "『OLH』"
 
     ],
 
